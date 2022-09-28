@@ -5,7 +5,7 @@ CFLAGS = -g -Wall $(INCLUDES)
 
 all: $(PROGRAMS)
 
-%.o:%.c
+%.o:%.c'
 	$(CC) $(CFLAGS) -c $<
 
 TESTER_OBJS = sim.o main.o
