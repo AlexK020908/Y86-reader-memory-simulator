@@ -67,7 +67,7 @@ typedef enum instructionMap
         I_INVALID
 } inst_map_t;
 
-std::unordered_map<std::string, inst_map_t> nTe;
+
 /* Takes name field instruction and convert to enum stated above */
 inst_map_t inst_to_enum(std::string str);
 
@@ -82,6 +82,6 @@ int runInstruction(state_t * state, instruction_t * ins);
 
 int runMySimulator(state_t *state, instruction_t *instructions, int n_inst);
 
-int initMap();
+void initMap();
 
 void printOutState(state_t * state);

@@ -4,7 +4,7 @@
 #include <cstdlib>
 long long maxpossible = 9223372036854775807;
 long minpossible = 0xFFFFFFFF;
-
+std::unordered_map<std::string, inst_map_t> nTe;
 int is_equal(state_t *s1, state_t *s2){
 	if (s1->start != s2->start) 	return 0;
 	if (s1->size  != s2->size) 	return 0;
@@ -105,7 +105,9 @@ int is_signed(uint64_t value) {
 //0 on success, 1 on fail 
 int runInstruction(state_t * state, instruction_t* ins) {
 	//first let us get the instruction in string format 
+	std::cout << "name: " << ins->name << std::endl;
 	inst_map_t enumType = inst_to_enum(ins->name);
+	std::cout << "enumtype: " << enumType << std::endl;
 	
 	switch(enumType) {
 		case I_NOP:
@@ -365,7 +367,7 @@ inst_map_t inst_to_enum(std::string str) {
     return nTe[str];
 }
 
- void init() {
+ void initMap() {
      nTe["nop"] = I_NOP;
     nTe["halt"] = I_HALT;
     nTe["rrmovq"] = I_RRMOVQ;
@@ -407,17 +409,31 @@ void printOutState(state_t * state) {
 	//print out pc 
 	std::cout << "PC:" <<  std::hex << state->pc<< std::endl;
 	//print out all registers 
+    std::cout << "Register values : " ;
 	for(int i = 0 ; i < 16 ; i++) {
-		std::cout << "Register" << " " << i << ": " << std::hex << state->R[i] << " ";
+		std::cout << std::hex << state->R[i] << " ";
 	}
 	//print out the flag 
 	std::cout << std::endl;
-	std::cout << "FLAGS: " << state->flags << std::endl;
+    std::string flagValue = "";
+    if(state->flags == 0x0) flagValue = "---";
+    else if(state->flags == O) flagValue = "--O";
+    else if(state->flags == S) flagValue = "S--";
+    else if(state->flags == Z) flagValue = "-Z-";
+    else if (state->flags == (O | S)) flagValue = "S-O";
+    else if (state->flags == (O | Z)) flagValue = "-ZO";
+    else if (state->flags == (Z | S)) flagValue = "SZ-";
+    else if (state->flags == (O | S | Z)) flagValue = "SZO";
+	std::cout << "FLAGS: " << flagValue << std::endl;
 	std::cout << "==============================================================================" << std::endl;
 	std::cout << "Memeory:  ";
 	for(int i = 0 ; i < 1024 ; i++) {
-		std::cout << std::hex << state->m[i] << " ";
+        char hex_string[16];
+        sprintf(hex_string, "%X", state->m[i]); //convert number to hex
+        std::cout << "0x" << hex_string << " ";
+		
 	}
+    std::cout << std::endl;
 
-    
+
 }
