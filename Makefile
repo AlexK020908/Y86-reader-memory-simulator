@@ -1,17 +1,10 @@
-PROGRAMS = sim
-INCLUDES = -I.
+CC = g++
+CFLAGS = -Wall -g
 
-CFLAGS = -g -Wall $(INCLUDES)
+main: main.o sim.o
+	$(CC) $(CFLAGS) -o main main.o sim.o
 
-all: $(PROGRAMS)
+main.o: main.cpp 
+	$(CC) $(CFLAGS) -c main.cpp
 
-%.o:%.c'
-	$(CC) $(CFLAGS) -c $<
-
-TESTER_OBJS = sim.o main.o
-
-sim: $(TESTER_OBJS)
-	$(CC) -o sim $(CFLAGS) $(TESTER_OBJS) $(KEEP_OBJS)
-
-clean:
-	rm -rf $(PROGRAMS) $(TESTER_OBJS) core
+sim.o: sim.h

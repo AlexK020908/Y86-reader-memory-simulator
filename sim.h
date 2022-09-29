@@ -1,7 +1,9 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <string.h>
+#include <string>
+#include <cstring>
+#include <unordered_map>
 
 //the implmentation is based on little endian
 #define O 0x10   //overflow flag 
@@ -10,11 +12,11 @@
 
 typedef struct state
 {
-        uint8_t memory[1024];   // Up to 1024 bytes of memory
-        uint64_t start;    // Address at which memory starts
-        uint64_t size;     // Number of bytes in memory that
+        uint8_t m[1024];   // Up to 1024 bytes of memory
+        uint64_t start;         // Address at which memory starts
+        uint64_t size;          // Number of bytes in memory that
                                 // are valid
-        uint64_t regs[16]; // Contents of the registers
+        uint64_t R[16];      // Contents of the registers
         uint64_t pc;            // Program counter
         uint8_t flags;          // Holds O, Z, and S flags
 } state_t;
@@ -24,7 +26,7 @@ typedef struct instruction
         uint8_t rA;
         uint8_t rB;
         uint64_t valC;
-        char name[10];	// nul-terminated
+        std::string name;
 } instruction_t;
 
 
@@ -64,20 +66,21 @@ typedef enum instructionMap
         I_INVALID
 } inst_map_t;
 
-
+std::unordered_map<std::string, inst_map_t> nTe;
 /* Takes name field instruction and convert to enum stated above */
-inst_t inst_to_enum(const char *str);
+inst_map_t inst_to_enum(std::string str);
 
 //for testing purposes, maybe we want to check if two states are equal 
-int is_equal(y86_state_t *s1, y86_state_t *s2);
+int is_equal(state_t *s1, state_t *s2);
 
+int read_8_bits(state_t *state, uint64_t address, uint64_t *value);
 
-int read_8_bits(y86_state_t *state, uint64_t address, uint64_t *value);
+int write_8_bits(state_t *state, uint64_t address, uint64_t value);
 
-int write_8_bits(y86_state_t *state, uint64_t address, uint64_t value);
+int runInstruction(state_t * state, instruction_t * ins);
 
-int runInstruction(y86_state_t * state, y86_inst_t * ins);
+int runMySimulator(state_t *state, instruction_t *instructions, int n_inst);
 
-int runMySimulator(y86_state_t *state, y86_inst_t *instructions, int n_inst);
+int initMap();
 
-
+void printOutState(state_t * state);
