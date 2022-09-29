@@ -4,6 +4,7 @@
 #include <string>
 #include <cstring>
 #include <unordered_map>
+#include <iostream>
 
 //the implmentation is based on little endian
 #define O 0x10   //overflow flag 

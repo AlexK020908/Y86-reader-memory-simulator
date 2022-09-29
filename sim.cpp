@@ -400,8 +400,24 @@ inst_map_t inst_to_enum(std::string str) {
  }
 
 void printOutState(state_t * state) {
-
-
+	//first print out start address
+	std::cout << "start address: " <<  std::hex << state->start << std::endl;
+	//print out allowed size 
+	std::cout << "Allowed size: " <<  std::hex << state->size << std::endl;
+	//print out pc 
+	std::cout << "PC:" <<  std::hex << state->pc<< std::endl;
+	//print out all registers 
+	for(int i = 0 ; i < 16 ; i++) {
+		std::cout << "Register" << " " << i << ": " << std::hex << state->R[i] << " ";
+	}
+	//print out the flag 
+	std::cout << std::endl;
+	std::cout << "FLAGS: " << state->flags << std::endl;
+	std::cout << "==============================================================================" << std::endl;
+	std::cout << "Memeory:  ";
+	for(int i = 0 ; i < 1024 ; i++) {
+		std::cout << std::hex << state->m[i] << " ";
+	}
 
     
 }
