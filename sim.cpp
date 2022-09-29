@@ -383,7 +383,6 @@ inst_map_t inst_to_enum(std::string str) {
     nTe["jne"] = I_JNE;
     nTe["jl"] = I_JL;
     nTe["jle"] = I_JLE;
-    nTe["jeq"] = I_JEQ;
     nTe["jg"] = I_JG;
     nTe["jge"] = I_JGE;
     nTe["addq"] = I_ADDQ;
