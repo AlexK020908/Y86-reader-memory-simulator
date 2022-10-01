@@ -293,7 +293,7 @@ int main() {
     //basically read till first space is the instruction name 
     //for example let us have 
     std::string instruction1 = "irmovq 100 %rax";
-    std::string instruction2 ="addq %rax %rax";
+    std::string instruction2 = "addq %rax %rax";
     //let us make it simple first
 
 
