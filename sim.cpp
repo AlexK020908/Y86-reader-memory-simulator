@@ -89,7 +89,7 @@ int write_8_bits(state_t *state, uint64_t address, uint64_t value) {
 
 //0 on fail, 1 on success
 int is_valid_address(state_t *state, uint64_t address) {
-	std::cout << "start address 2: " << address << std::endl;
+	std::cout << "start address: " << address << std::endl;
 	std::cout << state->start << std::endl;
 	if(address < state->start || address > state->start + state->size) return 0;
 	return 1;
@@ -137,13 +137,20 @@ int runInstruction(state_t * state, instruction_t* ins) {
 		case I_RMMOVQ:
 {			if (!is_valid_register(ins)) return 1;
 			if (!is_valid_address(state, ins->valC + state->R[ins->rB])) return 1;
+			std::cout << "valc: " << ins->valC << std::endl;
 			write_8_bits(state, ins->valC + state->R[ins->rB], state->R[ins->rA]);
 			state->pc += 10;
 			return 0;
 			break;}
 		case I_MRMOVQ:
-{			if (!is_valid_register(ins)) return 1;
-			if (!is_valid_address(state, ins->valC + state->R[ins->rB])) return 1;
+{			if (!is_valid_register(ins)) {
+	std::cout << "MRMOVQ TROUBLE 1" << std::endl;
+	return 1;
+}
+			if (!is_valid_address(state, ins->valC + state->R[ins->rB])) {
+					std::cout << "MRMOVQ TROUBLE 2" << std::endl;
+				return 1;
+			}
 			read_8_bits(state, ins->valC + state->R[ins->rB], &state->R[ins->rA]);
 			state->pc += 10;
 			return 0;

@@ -40,8 +40,8 @@ int readFirstArgAndCut(std::string & input) {
         int toreturn = NameToIndex[input.substr(0, i)];
         if(i + 1 < input.size()) input = input.substr(i + 1);
         else input = "";
-        // std::cout << "new input: " << input << std::endl;
-        // std::cout << "toreturn is: " << toreturn << std::endl;
+        std::cout << "new input: " << input << std::endl;
+        std::cout << "toreturn is: " << toreturn << std::endl;
         return toreturn;
 
 }
@@ -151,11 +151,14 @@ instruction_t parseInput(std::string input) {
             }
             case I_MRMOVQ:
             {		
-                    input.erase(remove(input.begin(), input.end(), ','), input.end());
+                input.erase(remove(input.begin(), input.end(), ','), input.end());
                 toReturn.name = "mrmovq";
-                toReturn.rA = readFirstArgAndCut(input);
                 toReturn.valC = readOffset(input);
                 toReturn.rB = readFirstArgAndCut(input);
+                toReturn.rA = readFirstArgAndCut(input);
+                // std::cout << "VALC: " << toReturn.valC << std::endl;
+                // std::cout << "RA: " << toReturn.rA << std::endl;
+                // std::cout << "Rb: " << toReturn.rB << std::endl;
 
                 break;
             }
@@ -348,7 +351,7 @@ int main() {
     state_t * globalState = new state_t();
     memset(globalState->m, 15, sizeof(globalState->m));
     globalState->start = 0x1000;
-    globalState->size = 700;
+    globalState->size = 0x700;
     memset(globalState->R, 0, sizeof(globalState->R));
     globalState->pc = 0x1000;
     globalState->flags = 0x0;
@@ -361,9 +364,13 @@ int main() {
     //basically read till first space is the instruction name 
     //for example let us have 
     std::string instruction1 = "irmovq 0x1000, %rax";
-    std::string instruction2 = "irmovq 5, %rbx";
+    std::string instruction2 = "irmovq 0x2ab3, %rbx";
     //let us make it simple first
     std::string instruction3 = "rmmovq %rbx, 0(%rax)";
+    std::string instruction4 = "mrmovq 0(%rax), %rcx";
+    std::string instruction5 = "irmovq 0x1008 %rsp";
+    std::string instruction6 = "pushq %rbx";
+
 
 
     /*
@@ -371,21 +378,28 @@ int main() {
         irmovq works 
         addq works 
         rrmovq works 
-
+        rmmovq works
+        mrmovq works
 
 
     */
 
 
-    int n = 3;
-    instruction_t insts[3];
+    int n = 6;
+    instruction_t insts[6];
     instruction_t testInst = parseInput(instruction1);
     instruction_t testInst2 = parseInput(instruction2);
     instruction_t testInst3 = parseInput(instruction3);
+    instruction_t testInst4 = parseInput(instruction4);
+    instruction_t testInst5 = parseInput(instruction5);
+    instruction_t testInst6 = parseInput(instruction6);
     insts[0] = testInst;
     insts[1] = testInst2;
     insts[2] = testInst3;
-    n = 3;
+    insts[3] = testInst4;
+    insts[4] = testInst5;
+    insts[5] = testInst6;
+    n = 6;
     
     runMySimulator(globalState, insts, n);
     printOutState(globalState);
