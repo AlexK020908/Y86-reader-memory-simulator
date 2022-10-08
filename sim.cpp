@@ -89,6 +89,8 @@ int write_8_bits(state_t *state, uint64_t address, uint64_t value) {
 
 //0 on fail, 1 on success
 int is_valid_address(state_t *state, uint64_t address) {
+	std::cout << "start address 2: " << address << std::endl;
+	std::cout << state->start << std::endl;
 	if(address < state->start || address > state->start + state->size) return 0;
 	return 1;
 }
@@ -105,9 +107,9 @@ int is_signed(uint64_t value) {
 //0 on success, 1 on fail 
 int runInstruction(state_t * state, instruction_t* ins) {
 	//first let us get the instruction in string format 
-	std::cout << "name: " << ins->name << std::endl;
+	std::cout << "valC: " << ins->valC << std::endl;
 	inst_map_t enumType = inst_to_enum(ins->name);
-	std::cout << "enumtype: " << enumType << std::endl;
+	std::cout << "name: " << ins->name << std::endl;
 	
 	switch(enumType) {
 		case I_NOP:
@@ -116,7 +118,7 @@ int runInstruction(state_t * state, instruction_t* ins) {
 			break;
             }
 		case I_HALT:
-{			return 1;
+{			return 0;
 			break;}
 		case I_RRMOVQ:
 {			if (!is_valid_register(ins)) return 1;
@@ -125,7 +127,9 @@ int runInstruction(state_t * state, instruction_t* ins) {
 			return 0;
 			break;}
 		case I_IRMOVQ:
-{			if (!is_valid_register(ins)) return 1;
+{			if (!is_valid_register(ins)) {
+	return 1;
+}
 			state->R[ins->rB] = ins->valC;
 			state->pc += 10;
 			return 0;
@@ -354,6 +358,7 @@ int runMySimulator(state_t *state, instruction_t *instructions, int n_inst) {
 	instruction_t * currentInstruction = instructions;
 	int currNumber = 0;
 	while(currNumber < n_inst) {
+		
 		if(runInstruction(state, currentInstruction)) return 1;
 		currentInstruction++;
 		currNumber++;
