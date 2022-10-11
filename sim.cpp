@@ -110,6 +110,9 @@ int runInstruction(state_t * state, instruction_t* ins) {
 	std::cout << "valC: " << ins->valC << std::endl;
 	inst_map_t enumType = inst_to_enum(ins->name);
 	std::cout << "name: " << ins->name << std::endl;
+	std::cout <<  state->R[ins->rA] << std::endl;
+	std::cout << state->R[ins->rB] << std::endl;
+
 	
 	switch(enumType) {
 		case I_NOP:
@@ -276,6 +279,7 @@ int runInstruction(state_t * state, instruction_t* ins) {
 			if (is_signed(state->R[ins->rB])) state->flags = S;
 			else if (state->R[ins->rB] == 0) state->flags = Z;
 			state->pc += 2;
+			std::cout << state->R[ins->rB] << std::endl;
 			return 0;
 			break;}
 		case I_MODQ:
@@ -420,9 +424,11 @@ void printOutState(state_t * state) {
 	//print out pc 
 	std::cout << "PC:" <<  std::hex << state->pc<< std::endl;
 	//print out all registers 
-    std::cout << "Register values : " ;
+    std::cout << "Register values: \n ";
 	for(int i = 0 ; i < 16 ; i++) {
-		std::cout << std::hex << state->R[i] << " ";
+		char hex_string[16];
+        sprintf(hex_string, "%X", state->R[i]); //convert number to hex
+        std::cout << "0x" << hex_string << " ";
 	}
 	//print out the flag 
 	std::cout << std::endl;

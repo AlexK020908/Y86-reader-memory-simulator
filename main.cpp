@@ -248,7 +248,7 @@ instruction_t parseInput(std::string input) {
             }
             case I_MULQ:
             {   	
-                    input.erase(remove(input.begin(), input.end(), ','), input.end());
+                input.erase(remove(input.begin(), input.end(), ','), input.end());
                 toReturn.name = "mulq";
                 toReturn.rA = readFirstArgAndCut(input);
                 toReturn.rB = readFirstArgAndCut(input);		
@@ -363,13 +363,19 @@ int main() {
     //we need to design a function to parse this input 
     //basically read till first space is the instruction name 
     //for example let us have 
-    std::string instruction1 = "irmovq 0x1000, %rax";
+    std::string instruction0 = "irmovq 0x1008, %rsp";
+    std::string instruction1 = "irmovq 0x1024, %rax";
     std::string instruction2 = "irmovq 0x2ab3, %rbx";
     //let us make it simple first
     std::string instruction3 = "rmmovq %rbx, 0(%rax)";
     std::string instruction4 = "mrmovq 0(%rax), %rcx";
-    std::string instruction5 = "irmovq 0x1008 %rsp";
+    std::string instruction5 = "irmovq -10, %r13";
     std::string instruction6 = "pushq %rbx";
+    std::string instruction7 = "popq %r14";
+    //checking ALU operations, add, sub, div, mod...
+    std::string i8 = "irmovq 0x10, %r14";
+    std::string i9 = "addq %r13, %r14";
+    std::string i10 = "mulq %r14, %r14";
 
 
 
@@ -380,26 +386,42 @@ int main() {
         rrmovq works 
         rmmovq works
         mrmovq works
-
-
+        popq works
+        pushq works
+        jump/unconditional works 
+        ALU ops?
+        add: works
+        subq: works
+        divq: works
     */
 
 
-    int n = 6;
-    instruction_t insts[6];
+    int n = 11;
+    instruction_t insts[11];
+    instruction_t testInst0 = parseInput(instruction0);
     instruction_t testInst = parseInput(instruction1);
     instruction_t testInst2 = parseInput(instruction2);
     instruction_t testInst3 = parseInput(instruction3);
     instruction_t testInst4 = parseInput(instruction4);
     instruction_t testInst5 = parseInput(instruction5);
     instruction_t testInst6 = parseInput(instruction6);
-    insts[0] = testInst;
-    insts[1] = testInst2;
-    insts[2] = testInst3;
-    insts[3] = testInst4;
-    insts[4] = testInst5;
-    insts[5] = testInst6;
-    n = 6;
+    instruction_t testinst7 = parseInput(instruction7);
+    instruction_t testinst8 = parseInput(i8);
+    instruction_t testinst9 = parseInput(i9);
+    instruction_t testinst10 = parseInput(i10);
+    
+    insts[0] = testInst0;
+    insts[1] = testInst;
+    insts[2] = testInst2;
+    insts[3] = testInst3;
+    insts[4] = testInst4;
+    insts[5] = testInst5;
+    insts[6] = testInst6;
+    insts[7] = testinst7;
+    insts[8] = testinst8;
+    insts[9] = testinst9;
+    insts[10] = testinst10;
+    
     
     runMySimulator(globalState, insts, n);
     printOutState(globalState);
